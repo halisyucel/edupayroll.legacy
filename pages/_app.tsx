@@ -3,13 +3,15 @@ import 'rsuite/dist/rsuite.min.css';
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
+import Snackbar from '../components/snackbar';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
-  );
+	return (
+		<Provider store={store}>
+			<Component {...pageProps} />
+			<Snackbar />
+		</Provider>
+	);
 }
 
-export default MyApp
+export default MyApp;
