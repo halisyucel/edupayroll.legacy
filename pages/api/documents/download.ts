@@ -117,7 +117,12 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				row.courseCode.toString().slice(0, 3),
 			];
 			const rowDays = JSON.parse(row.days);
-			for (let i = 0; i < numberOfDays; i++) rowKbsData.push(rowDays[i].toString());
+			console.log(rowDays);
+			console.log(rowDays.length);
+			
+			for (let i = 0; i < numberOfDays; i++) {
+				rowKbsData.push(rowDays[i].toString());
+			}
 			kbsSheet.addRow(rowKbsData);
 		}
 		const buffer = await kbsFile.xlsx.writeBuffer();

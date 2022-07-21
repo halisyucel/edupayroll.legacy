@@ -152,7 +152,7 @@ export const CourseCodes = [
 		value: 116,
 	},
 	{
-		label: 'Takviye Kursu (Haftasonu/Gece)',
+		label: 'Takviye Kursu (Gece|Haftasonu)',
 		value: 117,
 	},
 	{
@@ -192,7 +192,7 @@ export const CourseCodes = [
 		value: 123,
 	},
 	{
-		label: 'Gündüz (2/3-AFAD Eğt.Yard.)',
+		label: 'Gündüz (2|3-AFAD Eğt.Yard.)',
 		value: 212,
 	},
 ];
