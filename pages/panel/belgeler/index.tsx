@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { NextPage } from 'next';
-import Layout from '../../components/layout';
-import { Button, Input, InputPicker, Loader } from 'rsuite';
-import { fillDocumentRows, getYearData, MonthData } from '../../utils/documents';
-import { openSnackbar } from '../../redux/features/snackbar';
-import { useDispatch } from 'react-redux';
+import DocumentsRow from '../../../components/documents-row';
+import Layout from '../../../components/layout';
+import { openSnackbar } from '../../../redux/features/snackbar';
+import { RootState } from '../../../redux/store';
+import { fillDocumentRows, getYearData, MonthData } from '../../../utils/documents';
 import axios from 'axios';
-import DocumentRow from '../../components/document-row';
+import { NextPage } from 'next';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Input, InputPicker, Loader } from 'rsuite';
 
 export interface Document {
 	id: number;
@@ -15,19 +16,20 @@ export interface Document {
 	month: number;
 }
 
-const Document: NextPage = () => {
+const Documents: NextPage = () => {
 	const dispatch = useDispatch();
+	const { token } = useSelector((state: RootState) => state.account);
 	const [refreshData, setRefreshData] = useState<number>(0);
 	// append new document
 	const [isNewDocumentFormOpen, setIsNewDocumentFormOpen] = useState<boolean>(false);
 	const [isLoadingNewDocumentForm, setIsLoadingNewDocumentForm] = useState<boolean>(false);
 	const [newDocumentName, setNewDocumentName] = useState<string>('');
-	const [newDocumentMonth, setNewDocumentMonth] = useState<number>((new Date()).getMonth());
-	const [newDocumentYear, setNewDocumentYear] = useState<number>((new Date()).getFullYear());
+	const [newDocumentMonth, setNewDocumentMonth] = useState<number>(new Date().getMonth());
+	const [newDocumentYear, setNewDocumentYear] = useState<number>(new Date().getFullYear());
 	const resetNewDocumentForm = useCallback(() => {
 		setNewDocumentName('');
-		setNewDocumentMonth((new Date()).getMonth());
-		setNewDocumentYear((new Date()).getFullYear());
+		setNewDocumentMonth(new Date().getMonth());
+		setNewDocumentYear(new Date().getFullYear());
 		setIsNewDocumentFormOpen(false);
 	}, []);
 	const handleNewDocumentForm = useCallback(() => {
@@ -41,11 +43,20 @@ const Document: NextPage = () => {
 			return;
 		}
 		setIsLoadingNewDocumentForm(true);
-		axios.post('/api/documents/new', {
-			name: newDocumentName,
-			month: newDocumentMonth,
-			year: newDocumentYear,
-		})
+		axios
+			.post(
+				'/api/documents/new',
+				{
+					name: newDocumentName,
+					month: newDocumentMonth,
+					year: newDocumentYear,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				},
+			)
 			.then(() => {
 				dispatch(
 					openSnackbar({
@@ -74,6 +85,7 @@ const Document: NextPage = () => {
 		dispatch,
 		refreshData,
 		resetNewDocumentForm,
+		token,
 	]);
 	// get all documents
 	const [isLoadingDocuments, setIsLoadingDocuments] = useState<boolean>(false);
@@ -81,7 +93,11 @@ const Document: NextPage = () => {
 	useEffect(() => {
 		setIsLoadingDocuments(true);
 		axios
-			.get('/api/documents/all')
+			.get('/api/documents/all', {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
 			.then((res) => {
 				setDocuments(res.data);
 				fillDocumentRows();
@@ -97,7 +113,7 @@ const Document: NextPage = () => {
 			.finally(() => {
 				setIsLoadingDocuments(false);
 			});
-	}, [refreshData, dispatch]);
+	}, [refreshData, dispatch, token]);
 	return (
 		<Layout>
 			<div className={'w-full border-b-2 pb-2 flex'}>
@@ -132,7 +148,7 @@ const Document: NextPage = () => {
 							<InputPicker
 								block={true}
 								size={'sm'}
-								data={[ ...getYearData() ]}
+								data={[...getYearData()]}
 								cleanable={false}
 								placeholder={'Yıl seçiniz'}
 								value={newDocumentYear}
@@ -153,6 +169,7 @@ const Document: NextPage = () => {
 							color={'green'}
 							appearance={'primary'}
 							loading={isLoadingNewDocumentForm}
+							disabled={isLoadingNewDocumentForm}
 							onClick={() => handleNewDocumentForm()}
 						>
 							Kaydet
@@ -184,7 +201,7 @@ const Document: NextPage = () => {
 					<Loader />
 				</div>
 				{documents.map((document: Document) => (
-					<DocumentRow
+					<DocumentsRow
 						key={document.id}
 						id={document.id}
 						name={document.name}
@@ -197,4 +214,4 @@ const Document: NextPage = () => {
 	);
 };
 
-export default Document;
+export default Documents;

@@ -2,18 +2,16 @@ import pool from '../../../lib/pool';
 import { auth } from '../../../utils/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const _new = async (req: NextApiRequest, res: NextApiResponse) => {
+const edit = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (!(await auth(req))) return res.status(401).json({ message: 'Unauthorized' });
 	try {
 		await pool.query(
 			`
-			INSERT INTO documents (
-				name,
-				month,
-				year
-			) VALUES (?, ?, ?)
-		`,
-			[req.body.name, req.body.month, req.body.year],
+				UPDATE school_information
+				SET name = ?, director = ?, editor = ?, editorTitle = ?
+				WHERE id = 1
+			`,
+			[req.body.name, req.body.director, req.body.editor, req.body.editorTitle],
 		);
 		res.status(200).json({ status: 'success' });
 	} catch (err) {
@@ -21,4 +19,4 @@ const _new = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
-export default _new;
+export default edit;

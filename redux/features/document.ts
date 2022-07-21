@@ -1,27 +1,43 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface DocumentState {
-	value: number
+	refreshValue: number;
+	appendNewRowButtonIsLoading: {
+		rowID: number | null;
+		isLoading: boolean;
+	};
+	teachersData: { value: number; label: string }[];
 }
 
 const initialState: DocumentState = {
-	value: 0,
-}
+	refreshValue: 0,
+	appendNewRowButtonIsLoading: {
+		rowID: null,
+		isLoading: false,
+	},
+	teachersData: [],
+};
 
 export const documentSlice = createSlice({
 	name: 'document',
 	initialState,
 	reducers: {
-		increment: (state) => {
-			state.value += 1
+		refresh: (state) => {
+			state.refreshValue++;
 		},
-		decrement: (state) => {
-			state.value -= 1
+		setAppendNewRowButtonIsLoading: (
+			state,
+			action: PayloadAction<{ rowID: number | null; isLoading: boolean }>,
+		) => {
+			state.appendNewRowButtonIsLoading = action.payload;
+		},
+		setTeachers: (state, action: PayloadAction<{ value: number; label: string }[]>) => {
+			state.teachersData = action.payload;
 		},
 	},
-})
+});
 
-export const { increment, decrement } = documentSlice.actions;
+export const { refresh, setAppendNewRowButtonIsLoading, setTeachers } = documentSlice.actions;
 
 export default documentSlice.reducer;

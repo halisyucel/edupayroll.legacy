@@ -1,7 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '../../../lib/pool';
+import { auth } from '../../../utils/auth';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const edit = async (req: NextApiRequest, res: NextApiResponse) => {
+	if (!(await auth(req))) return res.status(401).json({ message: 'Unauthorized' });
 	try {
 		await pool.query(
 			`

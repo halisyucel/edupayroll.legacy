@@ -1,14 +1,16 @@
-import React, { useCallback, useState } from 'react';
-import { Teacher } from '../pages/panel/ogretmenler';
-import { Button, IconButton, Input } from 'rsuite';
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
-import { openSnackbar } from '../redux/features/snackbar';
+import { Teacher } from '../../pages/panel/ogretmenler';
+import { openSnackbar } from '../../redux/features/snackbar';
+import { RootState } from '../../redux/store';
+import { fillTeacherRows } from '../../utils/teachers';
 import axios from 'axios';
-import { fillTeacherRows } from '../lib/teachers';
+import React, { useCallback, useState } from 'react';
+import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, IconButton, Input } from 'rsuite';
 
 const TeacherRow: React.FC<Teacher> = ({ id, name, branch, information, identity_number }) => {
 	const dispatch = useDispatch();
+	const { token } = useSelector((state: RootState) => state.account);
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
 	const [isDeleteMode, setIsDeleteMode] = useState<boolean>(false);
 	const [isDeleted, setIsDeleted] = useState<boolean>(false);
@@ -34,15 +36,32 @@ const TeacherRow: React.FC<Teacher> = ({ id, name, branch, information, identity
 			);
 			return;
 		}
+		if (identityNumberInput.trim().length !== 11) {
+			dispatch(
+				openSnackbar({
+					message: 'Lütfen öğretmenin TC kimlik numarasını giriniz.',
+					variant: 'error',
+				}),
+			);
+			return;
+		}
 		setIsLoading(true);
 		axios
-			.put(`/api/teachers/edit`, {
-				id: id,
-				name: nameInput,
-				branch: branchInput,
-				identity_number: identityNumberInput,
-				information: informationInput,
-			})
+			.put(
+				`/api/teachers/edit`,
+				{
+					id: id,
+					name: nameInput,
+					branch: branchInput,
+					identity_number: identityNumberInput,
+					information: informationInput,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				},
+			)
 			.then(() => {
 				dispatch(
 					openSnackbar({
@@ -63,11 +82,15 @@ const TeacherRow: React.FC<Teacher> = ({ id, name, branch, information, identity
 			.finally(() => {
 				setIsLoading(false);
 			});
-	}, [id, nameInput, branchInput, identityNumberInput, informationInput, dispatch]);
+	}, [id, nameInput, branchInput, identityNumberInput, informationInput, dispatch, token]);
 	const handleDelete = useCallback(() => {
 		setIsLoading(true);
 		axios
-			.delete(`/api/teachers/delete?id=${id}`)
+			.delete(`/api/teachers/delete?id=${id}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
 			.then(() => {
 				dispatch(
 					openSnackbar({
@@ -89,7 +112,7 @@ const TeacherRow: React.FC<Teacher> = ({ id, name, branch, information, identity
 			.finally(() => {
 				setIsLoading(false);
 			});
-	}, [id, dispatch]);
+	}, [id, dispatch, token]);
 	return (
 		<div
 			data-hidden={isDeleted}
@@ -192,6 +215,7 @@ const TeacherRow: React.FC<Teacher> = ({ id, name, branch, information, identity
 							appearance={'primary'}
 							color={'green'}
 							loading={isLoading}
+							disabled={isLoading}
 							onClick={() => handleUpdate()}
 						>
 							Kaydet
@@ -214,6 +238,7 @@ const TeacherRow: React.FC<Teacher> = ({ id, name, branch, information, identity
 							appearance={'primary'}
 							color={'red'}
 							loading={isLoading}
+							disabled={isLoading}
 							onClick={() => handleDelete()}
 						>
 							Sil

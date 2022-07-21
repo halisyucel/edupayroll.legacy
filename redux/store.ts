@@ -1,11 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit';
+import accountReducer from './features/account';
 import documentReducer from './features/document';
 import snackbarReducer from './features/snackbar';
+import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
 	reducer: {
-		document: documentReducer,
 		snackbar: snackbarReducer,
+		document: documentReducer,
+		account: accountReducer,
 	},
 });
 

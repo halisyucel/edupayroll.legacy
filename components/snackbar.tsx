@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { RiCloseFill } from 'react-icons/ri';
 import { closeSnackbar } from '../redux/features/snackbar';
+import { RootState } from '../redux/store';
+import React, { useCallback, useEffect, useState } from 'react';
+import { RiCloseFill } from 'react-icons/ri';
+import { useDispatch, useSelector } from 'react-redux';
 
 const variantColors = {
 	success: 'bg-green-200',
@@ -27,7 +27,7 @@ const Snackbar = () => {
 	}, [open, dispatch]);
 	return (
 		<div
-			className={`fixed flex justify-center items-center transition-all duration-300 rounded left-4 p-2 pr-3 ${
+			className={`fixed z-50 flex justify-center items-center transition-all duration-300 rounded left-4 p-2 pr-3 ${
 				variantColors[variant]
 			} ${open ? 'bottom-4' : 'bottom-[-4rem]'}`}
 		>

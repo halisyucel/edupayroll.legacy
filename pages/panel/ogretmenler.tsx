@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { NextPage } from 'next';
 import Layout from '../../components/layout';
-import { Button, Input, Loader } from 'rsuite';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import TeacherRow from '../../components/teachers/teacher-row';
 import { openSnackbar } from '../../redux/features/snackbar';
-import TeacherRow from '../../components/teacher-row';
-import { fillTeacherRows } from '../../lib/teachers';
+import { RootState } from '../../redux/store';
+import { fillTeacherRows } from '../../utils/teachers';
+import axios from 'axios';
+import { NextPage } from 'next';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Input, Loader } from 'rsuite';
 
 export interface Teacher {
 	id: number;
@@ -18,6 +19,7 @@ export interface Teacher {
 
 const Teachers: NextPage = () => {
 	const dispatch = useDispatch();
+	const { token } = useSelector((state: RootState) => state.account);
 	const [refreshData, setRefreshData] = useState<number>(0);
 	// append new teacher
 	const [isNewTeacherFormOpen, setIsNewTeacherFormOpen] = useState<boolean>(false);
@@ -43,14 +45,31 @@ const Teachers: NextPage = () => {
 			);
 			return;
 		}
+		if (newTeacherIdentityNumber.trim().length !== 11) {
+			dispatch(
+				openSnackbar({
+					message: 'Lütfen öğretmenin TC kimlik numarasını giriniz.',
+					variant: 'error',
+				}),
+			);
+			return;
+		}
 		setIsLoadingNewTeacherForm(true);
 		axios
-			.post('/api/teachers/new', {
-				name: newTeacherName,
-				branch: newTeacherBranch,
-				identity_number: newTeacherIdentityNumber,
-				information: newTeacherInformation,
-			})
+			.post(
+				'/api/teachers/new',
+				{
+					name: newTeacherName,
+					branch: newTeacherBranch,
+					identity_number: newTeacherIdentityNumber,
+					information: newTeacherInformation,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				},
+			)
 			.then(() => {
 				dispatch(
 					openSnackbar({
@@ -80,6 +99,7 @@ const Teachers: NextPage = () => {
 		refreshData,
 		resetNewTeacherForm,
 		dispatch,
+		token,
 	]);
 	// get all teachers
 	const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -87,7 +107,11 @@ const Teachers: NextPage = () => {
 	useEffect(() => {
 		setIsLoadingTeachers(true);
 		axios
-			.get('/api/teachers/all')
+			.get('/api/teachers/all', {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
 			.then((res) => {
 				setTeachers(res.data);
 				fillTeacherRows();
@@ -103,7 +127,7 @@ const Teachers: NextPage = () => {
 			.finally(() => {
 				setIsLoadingTeachers(false);
 			});
-	}, [refreshData, dispatch]);
+	}, [refreshData, dispatch, token]);
 	return (
 		<Layout>
 			<div className={'w-full border-b-2 pb-2 flex'}>
@@ -137,7 +161,7 @@ const Teachers: NextPage = () => {
 						<label className={'block min-w-[12rem] mr-2'}>
 							<Input
 								size={'sm'}
-								placeholder={'TC Kimlik No'}
+								placeholder={'TC Kimlik No*'}
 								spellCheck={false}
 								value={newTeacherIdentityNumber}
 								onChange={(value) => setNewTeacherIdentityNumber(value)}
@@ -170,6 +194,7 @@ const Teachers: NextPage = () => {
 							color={'green'}
 							appearance={'primary'}
 							loading={isLoadingNewTeacherForm}
+							disabled={isLoadingNewTeacherForm}
 							onClick={() => handleNewTeacherForm()}
 						>
 							Kaydet

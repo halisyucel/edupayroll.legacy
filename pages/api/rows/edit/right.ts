@@ -1,17 +1,17 @@
-import pool from '../../../lib/pool';
-import { auth } from '../../../utils/auth';
+import pool from '../../../../lib/pool';
+import { auth } from '../../../../utils/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const edit = async (req: NextApiRequest, res: NextApiResponse) => {
+const right = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (!(await auth(req))) return res.status(401).json({ message: 'Unauthorized' });
 	try {
 		await pool.query(
 			`
-			UPDATE documents
-			SET name = ?, month = ?, year = ?
+			UPDATE document_rows
+			SET days = ?
 			WHERE id = ?
 		`,
-			[req.body.name, req.body.month, req.body.year, req.body.id],
+			[JSON.stringify(req.body.days), req.body.id],
 		);
 		res.status(200).json({ status: 'success' });
 	} catch (err) {
@@ -19,4 +19,4 @@ const edit = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
-export default edit;
+export default right;

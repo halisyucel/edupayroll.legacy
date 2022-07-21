@@ -1,13 +1,14 @@
-import React from 'react';
 import Link from 'next/link';
-
-// TODO en tepede yeni belge oluştur veya belge yükle seçenekleri olacak
-// TODO yine en tepede bütün veriyi indirme seçeneği olacak
+import React from 'react';
 
 const navigation = [
 	{
 		title: 'Hesap',
 		href: '/panel/',
+	},
+	{
+		title: 'Okul',
+		href: '/panel/okul',
 	},
 	{
 		title: 'Öğretmenler',
@@ -16,10 +17,6 @@ const navigation = [
 	{
 		title: 'Belgeler',
 		href: '/panel/belgeler',
-	},
-	{
-		title: 'Ayarlar',
-		href: '/panel/ayarlar',
 	},
 ];
 
@@ -35,7 +32,7 @@ const Sidebar = () => {
 				<br />
 				Ders
 				<br />
-				Çizelgesi
+				Çizelge
 				<br />
 				Uygulaması
 			</div>

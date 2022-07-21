@@ -7,3 +7,31 @@
 	height: 100%;
 	width: 100%;
 }
+
+.cell-input {
+	border-radius: 0 !important;
+	height: 30px !important;
+	width: 30px !important;
+}
+.cell-input-weekend {
+	border: 2px solid #00ccff !important;
+}
+.cell-input > input {
+	text-align: center;
+	padding: 4px !important;
+	height: 26px !important;
+}
+.cell-input > .rs-input-number-btn-group-vertical {
+	display: none;
+}
+.cell-day-weekend {
+	color: #2ab1d3;
+}
+
+.scrool-invisible::-webkit-scrollbar {
+	display: none;
+}
+
+.rs-picker-menu {
+	z-index: 99 !important;
+}
