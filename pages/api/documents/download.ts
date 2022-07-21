@@ -339,7 +339,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				sheet.getRow(i + 7).getCell(5).value = documentRowsFiltered[i].teacherInformation;
 				const rowDays = JSON.parse(documentRowsFiltered[i].days);
 				for (let j = 0; j < numberOfDays; j++) {
-					sheet.getRow(i + 7).getCell(j + 6).value = rowDays[j];
+					sheet.getRow(i + 7).getCell(j + 6).value = rowDays[j] === 0 ? '' : rowDays[j];
 					sheet.getRow(i + 7).getCell(j + 6).alignment = {
 						vertical: 'bottom',
 						horizontal: 'center',
