@@ -118,39 +118,21 @@ const Rows: React.FC<RowsProps> = () => {
 		[id, rows, dispatch, token],
 	);
 	const handleDownload = useCallback(() => {
+		const _downloadFiles = async () => {
+			for (let i = 1; i <= 2; i++) {
+				const link = document.createElement('a');
+				link.href = `/api/documents/download?id=${id}&f=${i}&token=${token}`;
+				link.setAttribute('download', `${id}_${i}.xlsx`);
+				document.body.appendChild(link);
+				link.click();
+				link.parentNode?.removeChild(link);
+			}
+		};
 		setIsDownloadLoading(true);
-		axios
-			.post(
-				'/api/documents/download',
-				{ id },
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				},
-			)
-			.then((res) => {
-				for (const fileName of res.data) {
-					const link = document.createElement('a');
-					link.href = `/api/download?f=${fileName}`;
-
-					link.setAttribute('download', fileName);
-
-					document.body.appendChild(link);
-
-					link.click();
-
-					link.parentNode?.removeChild(link);
-				}
-			})
-			.catch((error) => {
-				dispatch(refresh());
-				setDownloadError(error.response.data.message);
-			})
-			.finally(() => {
-				setIsDownloadLoading(false);
-			});
-	}, [id, dispatch, token]);
+		_downloadFiles().finally(() => {
+			setIsDownloadLoading(false);
+		});
+	}, [id, token]);
 	// get rows
 	useEffect(() => {
 		if (id) {

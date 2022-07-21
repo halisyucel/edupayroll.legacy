@@ -1,3 +1,18 @@
+import fs from 'fs';
+import path from 'path';
+
+export interface Row {
+	id: number;
+	documentID: number;
+	teacherID: number;
+	courseCode: number;
+	teacherIdentityNumber: string;
+	teacherName: string;
+	teacherBranch: string;
+	teacherInformation: string;
+	days: string;
+}
+
 export const MonthData = [
 	{
 		label: 'Ocak',
@@ -194,4 +209,23 @@ export const getDaysInMonth = (month: number, year: number) => {
 export const regenerateTwoDigitMonth = (month: number) => {
 	month += 1;
 	return month < 10 ? `0${month}` : `${month}`;
+};
+
+export const getTotalRows = (days: number[]) => {
+	let totalDays = 0;
+	for (const day of days) totalDays += day;
+	return totalDays;
+};
+
+export const getTotalDays = (documentRows: Row[]) => {
+	const days: number[] = [];
+	for (const row of documentRows) days.push(getTotalRows(JSON.parse(row.days)));
+	return getTotalRows(days);
+};
+
+export const distinctCourseCodes = (documentRows: Row[]) => {
+	const courseCodes: number[] = [];
+	for (const row of documentRows)
+		if (!courseCodes.includes(row.courseCode)) courseCodes.push(row.courseCode);
+	return courseCodes.sort((a, b) => a - b);
 };
