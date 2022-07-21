@@ -1,14 +1,14 @@
 import fs from 'fs';
+import path from 'path';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const download = async (req: NextApiRequest, res: NextApiResponse) => {
-	const files = fs.readdirSync('./public/files');
+	const files = fs.readdirSync(path.join(process.cwd(), 'files'));
 	for (const file of files) {
 		if (file === req.query.f) {
-			res.setHeader('Content-Type', 'application/octet-stream');
+			res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 			res.setHeader('Content-Disposition', 'attachment; filename=' + file);
-			res.setHeader('Content-Length', fs.statSync('./public/files/' + file).size);
-			fs.createReadStream('./public/files/' + file).pipe(res);
+			fs.createReadStream(path.join(process.cwd(), 'files', file)).pipe(res);
 			return;
 		}
 	}

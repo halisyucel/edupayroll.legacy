@@ -9,6 +9,7 @@ import {
 } from '../utils/documents';
 import ExcelJS from 'exceljs';
 import fs from 'fs';
+import path from 'path';
 
 interface GenerateFiles {
 	month: number;
@@ -30,8 +31,8 @@ const getTotalDays = (documentRows: Row[]) => {
 };
 
 const removeAllOldFiles = () => {
-	const files = fs.readdirSync('./public/files');
-	for (const file of files) fs.unlinkSync(`./public/files/${file}`);
+	const files = fs.readdirSync(path.join(process.cwd(), 'files'));
+	for (const file of files) fs.unlinkSync(path.join(process.cwd(), 'files', file));
 };
 
 const distinctCourseCodes = (documentRows: Row[]) => {
@@ -60,7 +61,7 @@ export const generateFiles = async ({ month, year, school, documentRows }: Gener
 		kbsSheet.addRow(rowKbsData);
 	}
 	const kbsUrl = `KBS-${month + 1}-${year}-${Math.floor(Math.random() * 10000000)}.xlsx`;
-	kbsFile.xlsx.writeFile(`public/files/${kbsUrl}`);
+	kbsFile.xlsx.writeFile(path.join(process.cwd(), 'files', kbsUrl));
 	// others
 	const usedCourseCodes = distinctCourseCodes(documentRows);
 	const filesForPrint = new ExcelJS.Workbook();
@@ -500,7 +501,7 @@ export const generateFiles = async ({ month, year, school, documentRows }: Gener
 	const cizelgelerUrl = `CIZELGE-${month + 1}-${year}-${Math.floor(
 		Math.random() * 10000000,
 	)}.xlsx`;
-	await filesForPrint.xlsx.writeFile(`public/files/${cizelgelerUrl}`);
+	await filesForPrint.xlsx.writeFile(path.join(process.cwd(), 'files', cizelgelerUrl));
 
 	return [kbsUrl, cizelgelerUrl];
 };

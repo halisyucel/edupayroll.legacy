@@ -6,7 +6,8 @@ import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 import { useEffect } from 'react';
-import { Provider, useDispatch } from 'react-redux';
+import { Helmet } from 'react-helmet';
+import { Provider } from 'react-redux';
 import 'rsuite/dist/rsuite.min.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -23,6 +24,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 	}, [router]);
 	return (
 		<Provider store={store}>
+			<Helmet>
+				<title>Ek Ders Çizelge Uygulaması</title>
+				<meta name={'robots'} content={'noindex, nofollow'} />
+			</Helmet>
 			<NextNProgress height={5} />
 			<Component {...pageProps} />
 			<Snackbar />
