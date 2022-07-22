@@ -148,13 +148,16 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				views: [{ zoomScale: 90, activeCell: 'A100' }],
 			});
 
-			sheet.getRow(1).font = { size: 20, underline: true, bold: true };
+			sheet.pageSetup.fitToPage = true;
+			sheet.pageSetup.orientation = 'landscape';
+
+			sheet.getRow(1).font = { size: 20, underline: true, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
 			sheet.getRow(1).getCell(3).value = 'EK DERS ÜCRET ÇİZELGESİ';
 			sheet.mergeCells(1, 3, 1, numberOfDays + 2);
 
 			sheet.getRow(2).getCell(1).value = 'Birimi:';
-			sheet.getRow(2).getCell(1).font = { size: 12, bold: true };
+			sheet.getRow(2).getCell(1).font = { size: 12, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.getRow(2).getCell(1).border = {
 				top: { style: 'thick' },
 				left: { style: 'thick' },
@@ -162,7 +165,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				right: { style: 'thin' },
 			};
 			sheet.getRow(2).getCell(3).value = school.name;
-			sheet.getRow(2).getCell(3).font = { size: 12, italic: true };
+			sheet.getRow(2).getCell(3).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(2).getCell(3).alignment = { vertical: 'bottom', horizontal: 'left' };
 			sheet.getRow(2).getCell(3).border = {
 				top: { style: 'thick' },
@@ -172,13 +175,13 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			};
 			sheet.getRow(2).getCell(5).value = courseText;
 			sheet.getRow(2).getCell(5).alignment = { vertical: 'bottom', horizontal: 'center' };
-			sheet.getRow(2).getCell(5).font = { size: 16, bold: true };
+			sheet.getRow(2).getCell(5).font = { size: 16, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.mergeCells(2, 1, 2, 2);
 			sheet.mergeCells(2, 3, 2, 4);
 			sheet.mergeCells(2, 5, 2, numberOfDays - 8);
 
 			sheet.getRow(3).getCell(1).value = 'Başlama Tarihi:';
-			sheet.getRow(3).getCell(1).font = { size: 12, bold: true };
+			sheet.getRow(3).getCell(1).font = { size: 12, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.getRow(3).getCell(1).border = {
 				top: { style: 'thin' },
 				left: { style: 'thick' },
@@ -188,7 +191,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.getRow(3).getCell(3).value = `01.${regenerateTwoDigitMonth(documentData.month)}.${
 				documentData.year
 			}`;
-			sheet.getRow(3).getCell(3).font = { size: 12, italic: true };
+			sheet.getRow(3).getCell(3).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(3).getCell(3).alignment = { vertical: 'bottom', horizontal: 'left' };
 			sheet.getRow(3).getCell(3).border = {
 				top: { style: 'thin' },
@@ -197,7 +200,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				right: { style: 'thick' },
 			};
 			sheet.getRow(3).getCell(numberOfDays).value = 'Ait Olduğu Ay:';
-			sheet.getRow(3).getCell(numberOfDays).font = { size: 12, bold: true };
+			sheet.getRow(3).getCell(numberOfDays).font = { size: 12, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.getRow(3).getCell(numberOfDays).border = {
 				top: { style: 'thick' },
 				left: { style: 'thick' },
@@ -206,7 +209,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			};
 			const monthText = MonthData.find((m) => m.value === documentData.month)?.label;
 			sheet.getRow(3).getCell(numberOfDays + 6).value = monthText;
-			sheet.getRow(3).getCell(numberOfDays + 6).font = { size: 12, italic: true };
+			sheet.getRow(3).getCell(numberOfDays + 6).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(3).getCell(numberOfDays + 6).alignment = {
 				vertical: 'bottom',
 				horizontal: 'right',
@@ -222,7 +225,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.mergeCells(3, numberOfDays, 3, numberOfDays + 5);
 
 			sheet.getRow(4).getCell(1).value = 'Bitiş Tarihi:';
-			sheet.getRow(4).getCell(1).font = { size: 12, bold: true };
+			sheet.getRow(4).getCell(1).font = { size: 12, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.getRow(4).getCell(1).border = {
 				top: { style: 'thin' },
 				left: { style: 'thick' },
@@ -232,7 +235,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.getRow(4).getCell(3).value = `${numberOfDays}.${regenerateTwoDigitMonth(
 				documentData.month,
 			)}.${documentData.year}`;
-			sheet.getRow(4).getCell(3).font = { size: 12, italic: true };
+			sheet.getRow(4).getCell(3).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(4).getCell(3).alignment = { vertical: 'bottom', horizontal: 'left' };
 			sheet.getRow(4).getCell(3).border = {
 				top: { style: 'thin' },
@@ -241,7 +244,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				right: { style: 'thick' },
 			};
 			sheet.getRow(4).getCell(numberOfDays).value = 'Bütçe Yılı:';
-			sheet.getRow(4).getCell(numberOfDays).font = { size: 12, bold: true };
+			sheet.getRow(4).getCell(numberOfDays).font = { size: 12, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.getRow(4).getCell(numberOfDays).border = {
 				top: { style: 'thin' },
 				left: { style: 'thick' },
@@ -249,7 +252,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				right: { style: 'thin' },
 			};
 			sheet.getRow(4).getCell(numberOfDays + 6).value = documentData.year;
-			sheet.getRow(4).getCell(numberOfDays + 6).font = { size: 12, italic: true };
+			sheet.getRow(4).getCell(numberOfDays + 6).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(4).getCell(numberOfDays + 6).alignment = {
 				vertical: 'bottom',
 				horizontal: 'right',
@@ -264,7 +267,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.mergeCells(4, 3, 4, 4);
 			sheet.mergeCells(4, numberOfDays, 4, numberOfDays + 5);
 
-			sheet.getRow(5).font = { size: 12, bold: true };
+			sheet.getRow(5).font = { size: 12, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.getRow(5).alignment = { vertical: 'bottom', horizontal: 'center' };
 			sheet.getRow(5).getCell(1).value = 'ÖĞRETMENİN';
 			sheet.getRow(5).getCell(1).border = {
@@ -289,7 +292,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			};
 			sheet.mergeCells(5, 6, 5, numberOfDays + 5);
 
-			sheet.getRow(6).font = { size: 12, bold: true };
+			sheet.getRow(6).font = { size: 12, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.getRow(6).alignment = { vertical: 'middle', horizontal: 'center' };
 			sheet.getRow(6).getCell(1).value = 'Sıra No';
 			sheet.getRow(6).getCell(1).alignment = {
@@ -327,7 +330,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			const documentRowsFiltered = documentRows.filter((r) => r.courseCode === courseCode);
 
 			for (let i = 0; i < documentRowsFiltered.length; i++) {
-				sheet.getRow(i + 7).font = { size: 12 };
+				sheet.getRow(i + 7).font = { size: 12, family: 1, name: 'Times New Roman' };
 				sheet.getRow(i + 7).alignment = { vertical: 'bottom', horizontal: 'left' };
 				sheet.getRow(i + 7).getCell(1).value = i + 1;
 				sheet.getRow(i + 7).getCell(1).alignment = { horizontal: 'center' };
@@ -382,6 +385,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.getRow(documentRowsFiltered.length + 7).getCell(numberOfDays + 1).font = {
 				size: 12,
 				bold: true,
+				family: 1, name: 'Times New Roman'
 			};
 			sheet.getRow(documentRowsFiltered.length + 7).getCell(numberOfDays + 1).alignment = {
 				vertical: 'middle',
@@ -404,6 +408,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.getRow(documentRowsFiltered.length + 7).getCell(numberOfDays + 6).font = {
 				size: 12,
 				bold: true,
+				family: 1, name: 'Times New Roman'
 			};
 			sheet.getRow(documentRowsFiltered.length + 7).getCell(numberOfDays + 6).alignment = {
 				vertical: 'middle',
@@ -447,10 +452,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				.getCell(
 					3,
 				).value = `Yukarıda belirtilen kişiler tarafından ${monthText?.toUpperCase()} ayında toplam ${totalDays} saat ek ders okutulmuştur.`;
-			sheet.getRow(8 + documentRowsFiltered.length).getCell(3).font = {
-				size: 12,
-				italic: true,
-			};
+			sheet.getRow(8 + documentRowsFiltered.length).getCell(3).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(8 + documentRowsFiltered.length).getCell(3).alignment = {
 				vertical: 'middle',
 				horizontal: 'left',
@@ -464,7 +466,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 
 			sheet.getRow(9 + documentRowsFiltered.length).height = 24;
 			sheet.getRow(9 + documentRowsFiltered.length).getCell(16).value = 'DÜZENLEYEN';
-			sheet.getRow(9 + documentRowsFiltered.length).getCell(16).font = { size: 12 };
+			sheet.getRow(9 + documentRowsFiltered.length).getCell(16).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(9 + documentRowsFiltered.length).getCell(16).alignment = {
 				vertical: 'middle',
 				horizontal: 'center',
@@ -477,7 +479,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			);
 
 			sheet.getRow(9 + documentRowsFiltered.length).getCell(24).value = 'UYGUNDUR';
-			sheet.getRow(9 + documentRowsFiltered.length).getCell(24).font = { size: 12 };
+			sheet.getRow(9 + documentRowsFiltered.length).getCell(24).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(9 + documentRowsFiltered.length).getCell(24).alignment = {
 				vertical: 'middle',
 				horizontal: 'center',
@@ -492,7 +494,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.getRow(10 + documentRowsFiltered.length).height = 24;
 
 			sheet.getRow(10 + documentRowsFiltered.length).getCell(12).value = 'Ad Soyad:';
-			sheet.getRow(10 + documentRowsFiltered.length).getCell(12).font = { size: 10 };
+			sheet.getRow(10 + documentRowsFiltered.length).getCell(12).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(10 + documentRowsFiltered.length).getCell(12).alignment = {
 				vertical: 'middle',
 				horizontal: 'left',
@@ -508,6 +510,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.getRow(10 + documentRowsFiltered.length).getCell(16).font = {
 				size: 14,
 				bold: true,
+				family: 1, name: 'Times New Roman'
 			};
 			sheet.getRow(10 + documentRowsFiltered.length).getCell(16).alignment = {
 				vertical: 'middle',
@@ -524,6 +527,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.getRow(10 + documentRowsFiltered.length).getCell(24).font = {
 				size: 14,
 				bold: true,
+				family: 1, name: 'Times New Roman'
 			};
 			sheet.getRow(10 + documentRowsFiltered.length).getCell(24).alignment = {
 				vertical: 'middle',
@@ -539,7 +543,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.getRow(11 + documentRowsFiltered.length).height = 24;
 
 			sheet.getRow(11 + documentRowsFiltered.length).getCell(12).value = 'Ünvan:';
-			sheet.getRow(11 + documentRowsFiltered.length).getCell(12).font = { size: 10 };
+			sheet.getRow(11 + documentRowsFiltered.length).getCell(12).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(11 + documentRowsFiltered.length).getCell(12).alignment = {
 				vertical: 'middle',
 				horizontal: 'left',
@@ -552,7 +556,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			);
 
 			sheet.getRow(11 + documentRowsFiltered.length).getCell(16).value = school.editorTitle;
-			sheet.getRow(11 + documentRowsFiltered.length).getCell(16).font = { size: 12 };
+			sheet.getRow(11 + documentRowsFiltered.length).getCell(16).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(11 + documentRowsFiltered.length).getCell(16).alignment = {
 				vertical: 'middle',
 				horizontal: 'center',
@@ -565,7 +569,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			);
 
 			sheet.getRow(11 + documentRowsFiltered.length).getCell(24).value = 'Okul Müdürü';
-			sheet.getRow(11 + documentRowsFiltered.length).getCell(24).font = { size: 12 };
+			sheet.getRow(11 + documentRowsFiltered.length).getCell(24).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(11 + documentRowsFiltered.length).getCell(24).alignment = {
 				vertical: 'middle',
 				horizontal: 'center',
@@ -580,7 +584,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet.getRow(12 + documentRowsFiltered.length).height = 24;
 
 			sheet.getRow(12 + documentRowsFiltered.length).getCell(12).value = 'İmza:';
-			sheet.getRow(12 + documentRowsFiltered.length).getCell(12).font = { size: 10 };
+			sheet.getRow(12 + documentRowsFiltered.length).getCell(12).font = { size: 12, family: 1, name: 'Times New Roman' };
 			sheet.getRow(12 + documentRowsFiltered.length).getCell(12).alignment = {
 				vertical: 'middle',
 				horizontal: 'left',

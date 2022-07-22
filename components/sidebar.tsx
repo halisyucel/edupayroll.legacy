@@ -3,10 +3,6 @@ import React from 'react';
 
 const navigation = [
 	{
-		title: 'Hesap',
-		href: '/panel/',
-	},
-	{
 		title: 'Okul',
 		href: '/panel/okul',
 	},
@@ -17,6 +13,10 @@ const navigation = [
 	{
 		title: 'Belgeler',
 		href: '/panel/belgeler',
+	},
+	{
+		title: 'Hesap',
+		href: '/panel/hesap',
 	},
 ];
 

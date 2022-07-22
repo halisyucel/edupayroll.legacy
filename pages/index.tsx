@@ -40,7 +40,7 @@ const Home: NextPage = () => {
 					}),
 				);
 				window.localStorage.setItem('token', res.data.token);
-				router.push('/panel');
+				router.push('/panel/belgeler');
 			})
 			.catch(() => {
 				dispatch(

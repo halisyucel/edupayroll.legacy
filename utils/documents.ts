@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 export interface Row {
 	id: number;
 	documentID: number;
@@ -203,7 +200,7 @@ export const isWeekend = (day: number, month: number, year: number) => {
 };
 
 export const getDaysInMonth = (month: number, year: number) => {
-	return new Date(year, month, 0).getDate();
+	return new Date(year, (month+1), 0).getDate()
 };
 
 export const regenerateTwoDigitMonth = (month: number) => {
