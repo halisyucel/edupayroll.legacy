@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest } from 'next';
 
 export const auth = async (req: NextApiRequest) => {
 	if (req.headers.authorization) {

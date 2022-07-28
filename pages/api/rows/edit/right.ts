@@ -11,7 +11,7 @@ const right = async (req: NextApiRequest, res: NextApiResponse) => {
 			SET days = ?
 			WHERE id = ?
 		`,
-			[JSON.stringify(req.body.days.map((i: number) => i === null ? 0 : i)), req.body.id],
+			[JSON.stringify(req.body.days.map((i: number) => (i === null ? 0 : i))), req.body.id],
 		);
 		res.status(200).json({ status: 'success' });
 	} catch (err) {

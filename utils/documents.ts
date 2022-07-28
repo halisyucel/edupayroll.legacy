@@ -91,132 +91,132 @@ export const CourseCodes = [
 	{
 		label: 'Gündüz',
 		value: 101,
-		excel: 'Gündüz'
+		excel: 'Gündüz',
 	},
 	{
 		label: 'Gece',
 		value: 102,
-		excel: 'Gece'
+		excel: 'Gece',
 	},
 	{
 		label: '%25 Fazla Gündüz',
 		value: 103,
-		excel: '%25 Fazla Gündüz'
+		excel: '%25 Fazla Gündüz',
 	},
 	{
 		label: '%25 Fazla Gece',
 		value: 104,
-		excel: '%25 Fazla Gece'
+		excel: '%25 Fazla Gece',
 	},
 	{
 		label: 'Belleticilik',
 		value: 106,
-		excel: 'Belleticilik'
+		excel: 'Belleticilik',
 	},
 	{
 		label: 'Sınav Görevi',
 		value: 107,
-		excel: 'Sınav Görevi'
+		excel: 'Sınav Görevi',
 	},
 	{
 		label: 'Egzersiz',
 		value: 108,
-		excel: 'Egzersiz'
+		excel: 'Egzersiz',
 	},
 	{
 		label: 'Hizmetiçi',
 		value: 109,
-		excel: 'Hizmetiçi'
+		excel: 'Hizmetiçi',
 	},
 	{
 		label: 'EDYGG-Gündüz',
 		value: 110,
-		excel: 'Ek Ders Yerine Geçen Gündüz'
+		excel: 'Ek Ders Yerine Geçen Gündüz',
 	},
 	{
 		label: 'EDYGG-Gece',
 		value: 111,
-		excel: 'Ek Ders Yerine Geçen Gece'
+		excel: 'Ek Ders Yerine Geçen Gece',
 	},
 	{
 		label: 'EDYGG - %25 Gündüz',
 		value: 112,
-		excel: 'Ek Ders Yerine Geçen %25 Gündüz'
+		excel: 'Ek Ders Yerine Geçen %25 Gündüz',
 	},
 	{
 		label: 'EYGG - %25 Gece',
 		value: 113,
-		excel: 'Ek Ders Yerine Geçen %25 Gece'
+		excel: 'Ek Ders Yerine Geçen %25 Gece',
 	},
 	{
 		label: 'Atış Eğitimi',
 		value: 114,
-		excel: 'Atış Eğitimi'
+		excel: 'Atış Eğitimi',
 	},
 	{
 		label: 'Cezaevleri Eğitim Merkezi - 160*Saat',
 		value: 115,
-		excel: 'Cezaevleri Eğitim Merkezi - 160*Saat'
+		excel: 'Cezaevleri Eğitim Merkezi - 160*Saat',
 	},
 	{
 		label: 'Takviye Kursu (Gündüz)',
 		value: 116,
-		excel: 'Takviye Kursu (Gündüz)'
+		excel: 'Takviye Kursu (Gündüz)',
 	},
 	{
 		label: 'Takviye Kursu (Gece-Haftasonu)',
 		value: 117,
-		excel: 'Takviye Kursu (Gece/Haftasonu)'
+		excel: 'Takviye Kursu (Gece/Haftasonu)',
 	},
 	{
 		label: 'Belleticilik %25 Fazla',
 		value: 118,
-		excel: 'Belleticilik %25 Fazla'
+		excel: 'Belleticilik %25 Fazla',
 	},
 	{
 		label: 'Nöbet Görevi',
 		value: 119,
-		excel: 'Nöbet Görevi'
+		excel: 'Nöbet Görevi',
 	},
 	{
 		label: 'Salon Başkanı',
 		value: 1070,
-		excel: 'Salon Başkanı'
+		excel: 'Salon Başkanı',
 	},
 	{
 		label: 'Gözetmen',
 		value: 10700,
-		excel: 'Gözetmen'
+		excel: 'Gözetmen',
 	},
 	{
 		label: 'Yedek Gözetmen',
 		value: 107000,
-		excel: 'Yedek Gözetmen'
+		excel: 'Yedek Gözetmen',
 	},
 	{
 		label: 'Yedek Engelli Gözetmen',
 		value: 1070000,
-		excel: 'Yedek Engelli Gözetmen'
+		excel: 'Yedek Engelli Gözetmen',
 	},
 	{
 		label: 'Nöbet Ücreti % 25 Fazla',
 		value: 121,
-		excel: 'Nöbet Ücreti % 25 Fazla'
+		excel: 'Nöbet Ücreti % 25 Fazla',
 	},
 	{
 		label: 'İYEP-Gündüz',
 		value: 122,
-		excel: 'İYEP - Gündüz'
+		excel: 'İYEP - Gündüz',
 	},
 	{
 		label: 'İYEP-Gece-Haftasonu',
 		value: 123,
-		excel: 'İYEP - Gece/Haftasonu'
+		excel: 'İYEP - Gece/Haftasonu',
 	},
 	{
 		label: 'Gündüz (2-3 AFAD Eğt.Yard.)',
 		value: 212,
-		excel: 'Gündüz (2/3-AFAD Eğt.Yard.)'
+		excel: 'Gündüz (2/3-AFAD Eğt.Yard.)',
 	},
 ];
 
@@ -226,7 +226,7 @@ export const isWeekend = (day: number, month: number, year: number) => {
 };
 
 export const getDaysInMonth = (month: number, year: number) => {
-	return new Date(year, (month+1), 0).getDate()
+	return new Date(year, month + 1, 0).getDate();
 };
 
 export const regenerateTwoDigitMonth = (month: number) => {
