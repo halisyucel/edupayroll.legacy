@@ -8,7 +8,6 @@ const _delete = async (req: NextApiRequest, res: NextApiResponse) => {
 		await pool.query(`DELETE FROM document_rows WHERE id = ?`, [req.query.id]);
 		res.status(200).json({ status: 'success' });
 	} catch (err) {
-		console.log(err);
 		res.status(500).json({ status: 'error' });
 	}
 };

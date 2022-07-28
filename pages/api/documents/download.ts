@@ -117,8 +117,6 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				row.courseCode.toString().slice(0, 3),
 			];
 			const rowDays = JSON.parse(row.days);
-			console.log(rowDays);
-			console.log(rowDays.length);
 			
 			for (let i = 0; i < numberOfDays; i++) {
 				rowKbsData.push(rowDays[i].toString());
@@ -143,8 +141,8 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 		const usedCourseCodes = distinctCourseCodes(documentRows);
 		const filesForPrint = new ExcelJS.Workbook();
 		for (const courseCode of usedCourseCodes) {
-			const courseText = CourseCodes.find((c) => c.value === courseCode)?.label;
-			const sheet = filesForPrint.addWorksheet(`${courseText}`, {
+			const course = CourseCodes.find((c) => c.value === courseCode);
+			const sheet = filesForPrint.addWorksheet(`${course?.label}`, {
 				views: [{ zoomScale: 90, activeCell: 'A100' }],
 			});
 
@@ -173,7 +171,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				bottom: { style: 'thin' },
 				right: { style: 'thick' },
 			};
-			sheet.getRow(2).getCell(5).value = courseText;
+			sheet.getRow(2).getCell(5).value = course?.excel;
 			sheet.getRow(2).getCell(5).alignment = { vertical: 'bottom', horizontal: 'center' };
 			sheet.getRow(2).getCell(5).font = { size: 16, bold: true, family: 1, name: 'Times New Roman' };
 			sheet.mergeCells(2, 1, 2, 2);
@@ -450,16 +448,16 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			sheet
 				.getRow(8 + documentRowsFiltered.length)
 				.getCell(
-					3,
+					2,
 				).value = `Yukarıda belirtilen kişiler tarafından ${monthText?.toUpperCase()} ayında toplam ${totalDays} saat ek ders okutulmuştur.`;
-			sheet.getRow(8 + documentRowsFiltered.length).getCell(3).font = { size: 12, family: 1, name: 'Times New Roman' };
-			sheet.getRow(8 + documentRowsFiltered.length).getCell(3).alignment = {
+			sheet.getRow(8 + documentRowsFiltered.length).getCell(2).font = { size: 12, family: 1, name: 'Times New Roman' };
+			sheet.getRow(8 + documentRowsFiltered.length).getCell(2).alignment = {
 				vertical: 'middle',
 				horizontal: 'left',
 			};
 			sheet.mergeCells(
 				8 + documentRowsFiltered.length,
-				3,
+				2,
 				8 + documentRowsFiltered.length,
 				15,
 			);

@@ -11,7 +11,5 @@ export const auth = async (req: NextApiRequest) => {
 			return false;
 		}
 	}
-	console.log('buraya girdim');
-
 	return false;
 };
