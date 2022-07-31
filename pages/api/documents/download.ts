@@ -14,6 +14,7 @@ import { School } from '../school/get';
 import ExcelJS from 'exceljs';
 import jwt from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
+import XLSX from 'xlsx';
 
 const download = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (!req.query.token) return res.status(401).json({ message: 'Unauthorized' });
@@ -125,9 +126,16 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 		}
 		const buffer = await kbsFile.xlsx.writeBuffer();
 
+		const oldVersionWorkbook = XLSX.read(buffer, { type: 'buffer' });
+
+		const oldVersionBuffer = XLSX.write(oldVersionWorkbook, {
+			type: 'buffer',
+			bookType: 'biff8',
+		})
+
 		res.setHeader(
 			'Content-Type',
-			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+			'application/vnd.ms-excel',
 		);
 		res.setHeader(
 			'Content-Disposition',
@@ -135,7 +143,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 				Math.random() * 100000,
 			)}.xls"`,
 		);
-		res.send(buffer);
+		res.send(oldVersionBuffer);
 	}
 	if (req.query.f === '2') {
 		const usedCourseCodes = distinctCourseCodes(documentRows);
