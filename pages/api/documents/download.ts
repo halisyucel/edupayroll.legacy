@@ -133,7 +133,7 @@ const download = async (req: NextApiRequest, res: NextApiResponse) => {
 			'Content-Disposition',
 			`attachment; filename="KBS-${documentData.month + 1}-${documentData.year}-${Math.floor(
 				Math.random() * 100000,
-			)}.xlsx"`,
+			)}.xls"`,
 		);
 		res.send(buffer);
 	}
