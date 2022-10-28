@@ -11,7 +11,7 @@ import { getDaysInMonth, isWeekend } from '../../../../utils/documents';
 import { Teacher } from '../../ogretmenler';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Loader } from 'rsuite';
 
@@ -118,21 +118,34 @@ const Rows: React.FC<RowsProps> = () => {
 		[id, rows, dispatch, token],
 	);
 	const handleDownload = useCallback(() => {
-		const _downloadFiles = async () => {
-			for (let i = 1; i <= 2; i++) {
-				const link = document.createElement('a');
-				link.href = `/api/documents/download?id=${id}&f=${i}&token=${token}`;
-				link.setAttribute('download', `${id}_${i}.xlsx`);
-				document.body.appendChild(link);
-				link.click();
-				link.parentNode?.removeChild(link);
-			}
-		};
 		setIsDownloadLoading(true);
-		_downloadFiles().finally(() => {
-			setIsDownloadLoading(false);
-		});
-	}, [id, token]);
+		axios
+			.get(`/api/documents/check?id=${id}&token=${token}`)
+			.then(({ data }) => {
+				if (data.check) {
+					const link = document.createElement('a');
+					link.href = `/api/documents/download?id=${id}&token=${token}`;
+					link.setAttribute('download', `belgeler.zip`);
+					document.body.appendChild(link);
+					link.click();
+					link.parentNode?.removeChild(link);
+					setDownloadError(null);
+					return;
+				}
+				dispatch(refresh());
+				setDownloadError(
+					`İndirme başarız! ${data.line}.satırda ${
+						data.cause === 'teacher' ? 'öğretmen' : 'ek ders tipi'
+					} seçilmemiş.`,
+				);
+			})
+			.catch(() => {
+				setDownloadError('İndirme başarız! Bir hata oluştu.');
+			})
+			.finally(() => {
+				setIsDownloadLoading(false);
+			});
+	}, [id, token, dispatch]);
 	// get rows
 	useEffect(() => {
 		if (id) {
