@@ -123,20 +123,42 @@ const Rows: React.FC<RowsProps> = () => {
 			.get(`/api/documents/check?id=${id}&token=${token}`)
 			.then(({ data }) => {
 				if (data.check) {
-					const link = document.createElement('a');
-					link.href = `/api/documents/download?id=${id}&token=${token}`;
-					link.setAttribute('download', `belgeler.zip`);
-					document.body.appendChild(link);
-					link.click();
-					link.parentNode?.removeChild(link);
-					setDownloadError(null);
+					fetch(`/api/documents/download?id=${id}&token=${token}`)
+						.then(async response => {
+							if (!response.ok) {
+								const errorText = await response.text();
+								let errorMessage;
+								try {
+									const errorJson = JSON.parse(errorText);
+									errorMessage = errorJson.message || 'Bir hata oluştu';
+								} catch {
+									errorMessage = errorText || 'Bir hata oluştu';
+								}
+								throw new Error(errorMessage);
+							}
+							return response.blob();
+						})
+						.then(blob => {
+							const url = window.URL.createObjectURL(blob);
+							const link = document.createElement('a');
+							link.href = url;
+							link.setAttribute('download', 'belgeler.zip');
+							document.body.appendChild(link);
+							link.click();
+							window.URL.revokeObjectURL(url);
+							link.parentNode?.removeChild(link);
+							setDownloadError(null);
+						})
+						.catch(error => {
+							setDownloadError('Dosya indirme işlemi başarısız oldu: ' + error.message);
+						});
 					return;
 				}
 				dispatch(refresh());
 				setDownloadError(
 					`İndirme başarız! ${data.line}.satırda ${
 						data.cause === 'teacher' ? 'öğretmen' : 'ek ders tipi'
-					} seçilmemiş.`,
+					} seçilmemiş.`
 				);
 			})
 			.catch(() => {
