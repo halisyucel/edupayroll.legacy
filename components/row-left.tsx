@@ -26,6 +26,7 @@ const RowLeft: React.FC<RowLeftProps> = ({ id, index, teacherID, courseCode, onN
 	const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
 	const [_teacherID, setTeacherID] = useState<number | null>(teacherID);
 	const [_courseCode, setCourseCode] = useState<number | null>(courseCode);
+	const [isDirty, setIsDirty] = useState(false);
 	const courseData = useMemo(() => (_teacherID ? CourseCodes : []), [_teacherID]);
 	const handleDelete = useCallback(() => {
 		setIsDeleteLoading(true);
@@ -56,8 +57,18 @@ const RowLeft: React.FC<RowLeftProps> = ({ id, index, teacherID, courseCode, onN
 				setIsDeleteLoading(false);
 			});
 	}, [id, dispatch, token]);
+	const handleTeacherChange = (value: number | null) => {
+		setTeacherID(value);
+		setIsDirty(true);
+	};
+	const handleCourseChange = (value: number | null) => {
+		setCourseCode(value);
+		setIsDirty(true);
+	};
 	// auto update
 	useEffect(() => {
+		if (!isDirty) return;
+
 		axios
 			.post(
 				'/api/rows/edit/left',
@@ -79,8 +90,11 @@ const RowLeft: React.FC<RowLeftProps> = ({ id, index, teacherID, courseCode, onN
 						variant: 'error',
 					}),
 				);
+			})
+			.finally(() => {
+				setIsDirty(false);
 			});
-	}, [id, _teacherID, _courseCode, dispatch, token]);
+	}, [id, _teacherID, _courseCode, dispatch, token, isDirty]);
 	return (
 		<div className={'flex py-1'}>
 			<div className={'w-[28px] border-r-2 mr-2 flex justify-left items-center'}>{index}</div>
@@ -92,7 +106,7 @@ const RowLeft: React.FC<RowLeftProps> = ({ id, index, teacherID, courseCode, onN
 					data={teachersData}
 					placeholder={'Öğretmen seç'}
 					placement={'autoVerticalEnd'}
-					onChange={(value) => setTeacherID(value)}
+					onChange={handleTeacherChange}
 				/>
 			</label>
 			<label className={'w-40 mr-2'}>
@@ -103,7 +117,7 @@ const RowLeft: React.FC<RowLeftProps> = ({ id, index, teacherID, courseCode, onN
 					value={_courseCode}
 					placement={'autoVerticalEnd'}
 					placeholder={'Ek Ders Tipi Seç'}
-					onChange={(value) => setCourseCode(value)}
+					onChange={handleCourseChange}
 					locale={{ noResultsText: 'Tip bulunamadı.' }}
 				/>
 			</label>

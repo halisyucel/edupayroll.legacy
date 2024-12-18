@@ -17,10 +17,13 @@ const RowRight: React.FC<RowRightProps> = ({ id, days, month, year }) => {
 	const dispatch = useDispatch();
 	const { token } = useSelector((state: RootState) => state.account);
 	const [_days, setDays] = useState<number[]>(days);
+	const [isDirty, setIsDirty] = useState(false);
+
 	const handleChange = useCallback(
 		(value: number, day: number) => {
 			const newDays = [..._days.slice(0, day - 1), value, ..._days.slice(day)];
 			setDays(newDays);
+			setIsDirty(true);
 		},
 		[_days],
 	);
@@ -32,6 +35,8 @@ const RowRight: React.FC<RowRightProps> = ({ id, days, month, year }) => {
 	}, [month, year]);
 	// auto update
 	useEffect(() => {
+		if (!isDirty) return;
+
 		axios
 			.post(
 				'/api/rows/edit/right',
@@ -45,15 +50,10 @@ const RowRight: React.FC<RowRightProps> = ({ id, days, month, year }) => {
 					},
 				},
 			)
-			.catch(() => {
-				dispatch(
-					openSnackbar({
-						message: 'Satır güncellenirken bir hata oluştu.',
-						variant: 'error',
-					}),
-				);
+			.finally(() => {
+				setIsDirty(false);
 			});
-	}, [_days, id, dispatch, token]);
+	}, [_days, id, dispatch, token, isDirty]);
 	return (
 		<div className={'pl-2 flex'}>
 			{cells.map((day) => (
